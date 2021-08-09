@@ -1,0 +1,32 @@
+# make.configuration.deps file for thorn openPMD
+
+# Standard openPMD utilities are copied from the install directory
+
+$(UTIL_DIR)/%: $(OPENPMD_DIR)/bin/%
+	@echo "Copying $* from $< to $(UTIL_DIR)"
+	-$(MKDIR) $(MKDIRFLAGS) $(UTIL_DIR) 2> /dev/null
+	cp $< $@
+
+
+
+# Cactus openPMD utilities are built
+
+OPENPMD_BUILD_DIR = $(BUILD_DIR)/OPENPMD
+OPENPMD_SRC_DIR   = $(PACKAGE_DIR)/ExternalLibraries/OPENPMD/src/util
+
+OPENPMD_CFLAGS  = $(CPPFLAGS) -DCCODE -I$(CONFIG) -I$(BINDINGS_DIR)/include -I$(BINDINGS_DIR)/include/OPENPMD -I$(FLESH_DIR)/include $(OPENPMD_INC_DIRS:%=-I%) $(MPI_INC_DIRS:%=-I%) $(CFLAGS)
+OPENPMD_LDFLAGS = $(DEBUG_LD) $(LDFLAGS) $(CXXFLAGS) $(EXTRAFLAGS) $(GENERAL_LIBRARIES)
+
+
+
+# Compile
+$(OPENPMD_BUILD_DIR)/%.o: $(OPENPMD_SRC_DIR)/%.c
+	@echo "Compiling $<"
+	-$(MKDIR) $(MKDIRFLAGS) $(OPENPMD_BUILD_DIR) 2> /dev/null
+	$(CC) $< $(OPENPMD_CFLAGS) -DTHORN_IS_OPENPMD -c -o $@
+
+# Link
+$(UTIL_DIR)/%: $(OPENPMD_BUILD_DIR)/%.o
+	@echo "Creating $* in $(UTIL_DIR) from $<"
+	-$(MKDIR) $(MKDIRFLAGS) $(UTIL_DIR) 2> /dev/null
+	$(LD) $< -o $@ $(OPENPMD_LDFLAGS)

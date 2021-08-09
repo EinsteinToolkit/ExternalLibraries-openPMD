@@ -1,0 +1,16 @@
+# Configuration definitions for thorn openPMD
+
+PROVIDES openPMD
+{
+  SCRIPT src/detect.sh
+  LANG bash
+  OPTIONS OPENPMD_DIR OPENPMD_INSTALL_DIR OPENPMD_INC_DIRS OPENPMD_LIB_DIRS OPENPMD_LIBS OPENPMD_ENABLE_FORTRAN
+}
+
+# Pass configuration options to build script
+REQUIRES openPMD
+
+# just in case a self-compiled CMake is required
+OPTIONAL CMake HDF5 ADIOS MPI
+{
+}
