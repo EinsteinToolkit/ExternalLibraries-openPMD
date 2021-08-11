@@ -42,6 +42,8 @@ ${TAR?} xf ${SRCDIR}/../dist/${NAME}.tar
 echo "openPMD: Configuring..."
 cd ${NAME}
 
+unset LIBS
+
 if [ "${CCTK_DEBUG_MODE}" = yes ]; then
     OPENPMD_BUILD_TYPE=Debug
 else
