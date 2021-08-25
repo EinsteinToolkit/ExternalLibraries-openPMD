@@ -63,7 +63,7 @@ if [ -n "$OPENPMD_BUILD" -o -z "${OPENPMD_DIR}" ]; then
     # Fortran modules may be located in the lib directory
     OPENPMD_INC_DIRS="${OPENPMD_DIR}/include ${OPENPMD_DIR}/lib"
     OPENPMD_LIB_DIRS="${OPENPMD_DIR}/lib"
-    OPENPMD_LIBS="amrex"
+    OPENPMD_LIBS="openPMD"
 else
     DONE_FILE=${SCRATCH_BUILD}/done/${THORN}
     if [ ! -e ${DONE_FILE} ]; then
