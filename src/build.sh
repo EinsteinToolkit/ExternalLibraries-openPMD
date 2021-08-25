@@ -62,18 +62,13 @@ else
   openPMD_USE_ADIOS2=OFF
 fi
 
-if [ -n "${HAVE_CAPABILITY_ADIOS}" ]; then
-  openPMD_USE_MPI=ON
-else
-  openPMD_USE_MPI=OFF
-fi
-
 mkdir build
 cd build
+# cannot use MPI and HDF5 at the same time since the ET's HDF5 is not parallel
 ${CMAKE_DIR:+${CMAKE_DIR}/bin/}cmake -DCMAKE_BUILD_TYPE=${OPENPMD_BUILD_TYPE} \
 -DopenPMD_USE_HDF5=${openPMD_USE_HDF5} -DHDF5_ROOT=${HDF5_DIR} \
 -DopenPMD_USE_ADIOS2=${openPMD_USE_ADIOS2} -DADIOS2_ROOT=${ADIOS2_DIR} \
--DopenPMD_USE_MPI=${openPMD_USE_MPI} -DMPI_ROOT=${MPI_DIR} \
+-DopenPMD_USE_MPI=OFF \
 -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} \
 -DopenPMD_USE_PYTHON=OFF -DopenPMD_BUILD_TESTING=OFF -DopenPMD_BUILD_EXAMPLES=OFF ..
 
