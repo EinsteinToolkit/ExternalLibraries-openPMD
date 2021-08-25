@@ -34,7 +34,7 @@ fi
 # assign default values to variables.
 # Try to find the library if build isn't explicitly requested
 if [ -z "${OPENPMD_BUILD}" -a -z "${OPENPMD_INC_DIRS}" -a -z "${OPENPMD_LIB_DIRS}" -a -z "${OPENPMD_LIBS}" ]; then
-    find_lib OPENPMD amrex 1 1.0 "amrex" "openPMD.H" "$OPENPMD_DIR"
+    find_lib OPENPMD openPMD 1 1.0 "openPMD" "openPMD/openPMD.hpp" "$OPENPMD_DIR"
 fi
 
 THORN=openPMD
