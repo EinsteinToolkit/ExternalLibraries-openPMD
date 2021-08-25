@@ -66,10 +66,13 @@ mkdir build
 cd build
 # cannot use MPI and HDF5 at the same time since the ET's HDF5 is not parallel
 # openPMD fails to compile with C++17 on Intel 19+g++8.4
+# shared libs cause issues with other parts of ExternalLibraries that are built
+# only statically (eg hDF5).
 ${CMAKE_DIR:+${CMAKE_DIR}/bin/}cmake -DCMAKE_BUILD_TYPE=${OPENPMD_BUILD_TYPE} \
 -DopenPMD_USE_HDF5=${openPMD_USE_HDF5} -DHDF5_ROOT=${HDF5_DIR} \
 -DopenPMD_USE_ADIOS2=${openPMD_USE_ADIOS2} -DADIOS2_ROOT=${ADIOS_DIR} \
 -DopenPMD_USE_MPI=OFF \
+-DBUILD_SHARED_LIBS=OFF \
 -DCMAKE_CXX_STANDARD=14 \
 -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} \
 -DopenPMD_USE_PYTHON=OFF -DopenPMD_BUILD_TESTING=OFF -DopenPMD_BUILD_EXAMPLES=OFF ..
