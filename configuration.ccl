@@ -1,6 +1,6 @@
 # Configuration definitions for thorn openPMD
 
-PROVIDES openPMD
+PROVIDES openPMD_api
 {
   SCRIPT src/detect.sh
   LANG bash
@@ -8,7 +8,7 @@ PROVIDES openPMD
 }
 
 # Pass configuration options to build script
-REQUIRES openPMD
+REQUIRES openPMD_api
 
 # just in case a self-compiled CMake is required
 OPTIONAL CMake HDF5 ADIOS
