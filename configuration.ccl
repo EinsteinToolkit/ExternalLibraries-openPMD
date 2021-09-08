@@ -11,6 +11,6 @@ PROVIDES openPMD_api
 REQUIRES openPMD_api
 
 # just in case a self-compiled CMake is required
-OPTIONAL CMake HDF5 ADIOS
+OPTIONAL CMake HDF5 ADIOS MPI
 {
 }

@@ -62,16 +62,22 @@ else
   openPMD_USE_ADIOS2=OFF
 fi
 
+if [ -n "${HAVE_CAPABILITY_MPI}" ]; then
+  openPMD_USE_MPI=ON
+else
+  openPMD_USE_MPI=OFF
+fi
+
 mkdir build
 cd build
-# cannot use MPI and HDF5 at the same time since the ET's HDF5 is not parallel
+# CarpetX requires MPI aware openPMD
 # openPMD fails to compile with C++17 on Intel 19+g++8.4
 # shared libs cause issues with other parts of ExternalLibraries that are built
 # only statically (eg hDF5).
 ${CMAKE_DIR:+${CMAKE_DIR}/bin/}cmake -DCMAKE_BUILD_TYPE=${OPENPMD_BUILD_TYPE} \
 -DopenPMD_USE_HDF5=${openPMD_USE_HDF5} -DHDF5_ROOT=${HDF5_DIR} \
 -DopenPMD_USE_ADIOS2=${openPMD_USE_ADIOS2} -DADIOS2_ROOT=${ADIOS_DIR} \
--DopenPMD_USE_MPI=OFF \
+-DopenPMD_USE_MPI=${openPMD_USE_MPI} \
 -DBUILD_SHARED_LIBS=OFF \
 -DBUILD_CLI_TOOLS=OFF -DBUILD_TESTING=OFF \
 -DCMAKE_CXX_STANDARD=14 \
