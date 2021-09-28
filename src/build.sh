@@ -51,7 +51,30 @@ else
 fi
 
 if [ -n "${HAVE_CAPABILITY_HDF5}" ]; then
-  openPMD_USE_HDF5=ON
+  # this is fairly ugly. It assumes an "include" directory in HDF5_DIR and it
+  # parses include file for HDF5 information to check if HDF5 is compatible
+  # with openPMD.
+  H5PUBCONFFILES="H5pubconf.h H5pubconf-64.h H5pubconf-32.h"
+  for dir in ${HDF5_DIR}/include; do
+    for file in $H5PUBCONFFILES ; do
+      if [ -r "$dir/$file" ]; then
+        H5PUBCONF="$H5PUBCONF $dir/$file"
+        break
+      fi
+    done
+  done
+  if [ -z "$H5PUBCONF" ]; then
+    if [ "$(echo ${VERBOSE} | tr '[:upper:]' '[:lower:]')" = 'yes' ]; then
+      echo "${THORN}: Could not find H5pubconf.h to determine parallel HDF5, will proceed without HDF5."
+      openPMD_USE_HDF5=OFF
+    fi
+  else
+    if grep -qe '#define H5_HAVE_PARALLEL 1' $H5PUBCONF 2> /dev/null; then
+      openPMD_USE_HDF5=ON
+    else
+      openPMD_USE_HDF5=OFF
+    fi
+  fi
 else
   openPMD_USE_HDF5=OFF
 fi
