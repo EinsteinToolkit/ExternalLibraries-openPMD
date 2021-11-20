@@ -1,0 +1,17 @@
+diff -ur openPMD-api-0.14.2.orig/CMakeLists.txt openPMD-api-0.14.2/CMakeLists.txt
+--- openPMD-api-0.14.2.orig/CMakeLists.txt	2021-08-17 20:49:33.000000000 -0700
++++ openPMD-api-0.14.2/CMakeLists.txt	2021-11-19 23:14:36.236425426 -0800
+@@ -206,7 +206,11 @@
+ # HDF5 checks
+ string(CONCAT openPMD_HDF5_STATUS "")
+ # version: lower limit
+-if(openPMD_HAVE_HDF5 AND HDF5_VERSION VERSION_LESS 1.8.13)
++if(openPMD_HAVE_HDF5 AND NOT HDF5_VERSION)
++    message(WARNING 
++        "Found HDF5 but could not determine version. At least "
++        "version 1.8.13 is required.\n")
++elseif(openPMD_HAVE_HDF5 AND HDF5_VERSION VERSION_LESS 1.8.13)
+     string(CONCAT openPMD_HDF5_STATUS
+         "Found HDF5 version ${HDF5_VERSION} is too old. At least "
+         "version 1.8.13 is required.\n")
+Only in openPMD-api-0.14.2: CMakeLists.txt~
