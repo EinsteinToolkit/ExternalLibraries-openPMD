@@ -14,7 +14,7 @@ set -e                          # Abort on errors
 
 # Set locations
 THORN=openPMD
-NAME=openPMD-api-0.14.2
+NAME=openPMD-api-0.14.5
 SRCDIR="$(dirname $0)"
 BUILD_DIR=${SCRATCH_BUILD}/build/${THORN}
 if [ -z "${OPENPMD_INSTALL_DIR}" ]; then
