@@ -41,6 +41,7 @@ ${TAR?} xf ${SRCDIR}/../dist/${NAME}.tar
 
 echo "openPMD: Applying patches..."
 pushd ${NAME}
+${PATCH?} -p1 < ${SRCDIR}/../dist/hdf5_version.patch
 ${PATCH?} -p1 < ${SRCDIR}/../dist/explicit_specialization.patch
 # Some (ancient but still used) versions of patch don't support the
 # patch format used here but also don't report an error using the exit

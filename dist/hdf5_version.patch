@@ -1,0 +1,12 @@
+diff -ur openPMD-api-0.15.2.orig/CMakeLists.txt openPMD-api-0.15.2/CMakeLists.txt
+--- openPMD-api-0.15.2.orig/CMakeLists.txt	2023-08-18 09:15:34.000000000 -0700
++++ openPMD-api-0.15.2/CMakeLists.txt	2024-08-05 14:23:16.156382759 -0700
+@@ -335,7 +335,7 @@
+ string(CONCAT openPMD_HDF5_STATUS "")
+ # version: lower limit
+ if(openPMD_HAVE_HDF5)
+-    if(HDF5_VERSION STREQUAL "")
++    if("${HDF5_VERSION}" STREQUAL "")
+         message(WARNING "HDF5_VERSION is empty. Now assuming it is 1.8.13 or newer.")
+     else()
+         if(HDF5_VERSION VERSION_LESS 1.8.13)
