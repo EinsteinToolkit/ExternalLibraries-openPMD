@@ -15,6 +15,8 @@ set -e                          # Abort on errors
 # Set locations
 THORN=openPMD
 NAME=openPMD-api-0.16.0
+JSON_NAME=json-3.11.3
+TOML11_NAME=toml11-3.7.1
 SRCDIR="$(dirname $0)"
 BUILD_DIR=${SCRATCH_BUILD}/build/${THORN}
 if [ -z "${OPENPMD_INSTALL_DIR}" ]; then
@@ -38,6 +40,8 @@ mkdir ${BUILD_DIR} ${INSTALL_DIR}
 echo "openPMD: Unpacking archive..."
 pushd ${BUILD_DIR}
 ${TAR?} xf ${SRCDIR}/../dist/${NAME}.tar
+${TAR?} xf ${SRCDIR}/../dist/${JSON_NAME}.tar
+${TAR?} xf ${SRCDIR}/../dist/${TOML11_NAME}.tar
 
 echo "openPMD: Applying patches..."
 pushd ${NAME}
@@ -124,7 +128,9 @@ ${CMAKE_DIR:+${CMAKE_DIR}/bin/}cmake -DCMAKE_BUILD_TYPE=${OPENPMD_BUILD_TYPE} \
 -DBUILD_CLI_TOOLS=OFF -DBUILD_TESTING=OFF \
 -DCMAKE_CXX_STANDARD=14 \
 -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} -DCMAKE_INSTALL_LIBDIR=lib \
--DopenPMD_USE_PYTHON=OFF -DopenPMD_BUILD_TESTING=OFF -DopenPMD_BUILD_EXAMPLES=OFF ..
+-DopenPMD_USE_PYTHON=OFF -DopenPMD_BUILD_TESTING=OFF -DopenPMD_BUILD_EXAMPLES=OFF \
+-DFETCHCONTENT_FULLY_DISCONNECTED=ON \
+-DopenPMD_json_src=$PWD/../../${JSON_NAME} -DopenPMD_toml11_src=$PWD/../../${TOML11_NAME} ..
 
 echo "openPMD: Building..."
 ${MAKE}
