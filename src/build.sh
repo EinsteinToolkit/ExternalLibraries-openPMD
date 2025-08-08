@@ -14,9 +14,9 @@ set -e                          # Abort on errors
 
 # Set locations
 THORN=openPMD
-NAME=openPMD-api-0.16.0
-JSON_NAME=json-3.11.3
-TOML11_NAME=toml11-3.7.1
+NAME=openPMD-api-0.16.1
+JSON_NAME=json-3.12.0
+TOML11_NAME=toml11-4.2.0
 SRCDIR="$(dirname $0)"
 BUILD_DIR=${SCRATCH_BUILD}/build/${THORN}
 if [ -z "${OPENPMD_INSTALL_DIR}" ]; then
@@ -45,8 +45,6 @@ ${TAR?} xf ${SRCDIR}/../dist/${TOML11_NAME}.tar
 
 echo "openPMD: Applying patches..."
 pushd ${NAME}
-${PATCH?} -p1 < ${SRCDIR}/../dist/openPMD-api.patch
-${PATCH?} -p1 < ${SRCDIR}/../dist/hdf5_version.patch
 # Some (ancient but still used) versions of patch don't support the
 # patch format used here but also don't report an error using the exit
 # code. So we use this patch to test for this
