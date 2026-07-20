@@ -112,6 +112,31 @@ else
   openPMD_USE_MPI=OFF
 fi
 
+# CMake's FindMPI does not reliably locate an MPI installation built from
+# source by the MPI thorn (no system MPI is registered), which causes
+# find_package(MPI) to fail with e.g. "Could NOT find MPI_CXX (missing:
+# MPI_CXX_LIB_NAMES MPI_CXX_HEADER_DIR MPI_CXX_WORKS)". When the MPI thorn
+# built MPI from source (MPI_BUILD set), hint CMake at it via MPI_HOME and
+# the wrapper compilers found beneath MPI_DIR. This is a no-op for a system
+# or manually configured MPI (MPI_BUILD empty), leaving CMake's own
+# detection untouched, so it does not disrupt non-thorn MPI builds.
+MPI_C_OPTION=
+MPI_CXX_OPTION=
+MPI_Fortran_OPTION=
+if [ -n "${MPI_BUILD}" ] && [ -n "${MPI_DIR}" ] && [ -d "${MPI_DIR}" ]; then
+  export MPI_HOME="${MPI_DIR}"
+  if [ -x "${MPI_DIR}/bin/mpicc" ]; then
+    MPI_C_OPTION="-DMPI_C_COMPILER=${MPI_DIR}/bin/mpicc"
+  fi
+  if [ -x "${MPI_DIR}/bin/mpicxx" ]; then
+    MPI_CXX_OPTION="-DMPI_CXX_COMPILER=${MPI_DIR}/bin/mpicxx"
+  fi
+  if [ "${OPENPMD_ENABLE_FORTRAN}" = ON ] && [ -x "${MPI_DIR}/bin/mpifort" ]; then
+    MPI_Fortran_OPTION="-DMPI_Fortran_COMPILER=${MPI_DIR}/bin/mpifort"
+  fi
+  export PATH="${MPI_DIR}/bin:${PATH}"
+fi
+
 mkdir build
 cd build
 # CarpetX requires MPI aware openPMD
@@ -121,7 +146,7 @@ cd build
 ${CMAKE_DIR:+${CMAKE_DIR}/bin/}cmake -DCMAKE_BUILD_TYPE=${OPENPMD_BUILD_TYPE} \
 -DopenPMD_USE_HDF5=${openPMD_USE_HDF5} -DHDF5_ROOT=${HDF5_DIR} \
 -DopenPMD_USE_ADIOS2=${openPMD_USE_ADIOS2} -DADIOS2_ROOT=${ADIOS2_DIR} \
--DopenPMD_USE_MPI=${openPMD_USE_MPI} \
+-DopenPMD_USE_MPI=${openPMD_USE_MPI} ${MPI_C_OPTION} ${MPI_CXX_OPTION} ${MPI_Fortran_OPTION} \
 -DBUILD_SHARED_LIBS=OFF \
 -DBUILD_CLI_TOOLS=OFF -DBUILD_TESTING=OFF \
 -DCMAKE_CXX_STANDARD=14 \
